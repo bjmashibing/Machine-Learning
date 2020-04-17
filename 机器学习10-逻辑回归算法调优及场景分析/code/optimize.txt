@@ -1,0 +1,32 @@
+Logistic Regression
+
+是一种线性有监督的分类模型
+
+1，设置W0，因为如果不设置W0就会使得分界一定会穿过原点，这样就会使得计算的模型受到很大的局限
+    lr.setIntercept(true)
+2，线性不可分，升高维度，方式方法让已有的维度俩俩相乘来构建更多的维度
+    .map { labelpoint =>
+            val label = labelpoint.label
+            val feature = labelpoint.features
+            val array = Array(feature(0), feature(1), feature(0) * feature(1))
+            val convertFeature = Vectors.dense(array)
+            new LabeledPoint(label, convertFeature)
+          }
+3，Threshold阈值在LR里面默认是根据0.5来进行二分类的，我们可以为了去规避一些风险，我们可以去掉阈值，
+    这样最后LR给的结果就是0到1之间的一个分值，我们可以根据分值，自己来定到底属于哪个类别
+    TradeOff：人为的去调整阈值，最后的正确率一定会下降
+    val model = lr.run(trainingData).clearThreshold()
+4，鲁棒性调优，鲁棒性：模型的通用性，举一反三的能力，推广能力，泛化能力
+    尽可能在保证正确率的情况下，使得W越小越好！
+    好到个什么程度？
+    事实上人们定义了L1正则化和L2正则化，然后重新误差函数让算法去减小误差的同时顺手减小L2L1或
+    L1：有的趋近于1，有的趋近于0，稀疏编码
+    L2：整体的W同时变小，岭回归
+    TradeOff: 人们人为的去重写了误差函数，会导致最后的正确率一定会下降
+    lr.optimizer.setUpdater(new SquaredL2Updater)
+    lr.optimizer.setRegParam(0.4)
+5，数值优化，方差归一化，会考虑到一组数里面的所有数据，就是每个数去除以方差
+    带来的好处就是会使得各个W基本数量级一致
+    缺点未必会落到0到1之间
+6，数值优化，均值归一化，让找到最优的速度变快，让各个维度的数据有正有负，就会使得各个W在调整的时候有的变大有的变小
+    val scalerModel = new StandardScaler(withMean=true, withStd=true).fit(vectors)

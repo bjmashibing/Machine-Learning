@@ -1,0 +1,14 @@
+teenager	high	no	common	no
+teenager	high	no	well	no
+middle	high	no	common	yes
+older	medium	no	common	yes
+older	low	yes	common	yes
+older	low	yes	well	no
+middle	low	yes	well	yes
+teenager	medium	no	common	no
+teenager	low	yes	common	yes
+older	medium	yes	common	yes
+teenager	medium	yes	well	yes
+middle	medium	no	well	yes
+middle	high	yes	common	yes
+older	medium	no	well	no
